@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Entrar</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: #111;
+      color: white;
+      display: flex;
+      height: 100vh;
+      justify-content: center;
+      align-items: center;
+    }
+    .box {
+      background: #1e1e1e;
+      padding: 30px;
+      border-radius: 10px;
+      text-align: center;
+    }
+    input {
+      padding: 10px;
+      width: 260px;
+      margin: 10px 0;
+    }
+    button {
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<div class="box">
+  <h2>Coloque sua API do Gemini</h2>
+  <input id="apiKey" placeholder="AIza...">
+  <br>
+  <button onclick="entrar()">Entrar</button>
+</div>
+
+<script>
+function entrar() {
+  const key = document.getElementById("apiKey").value.trim();
+
+  if (!key) {
+    alert("Digite a API key");
+    return;
+  }
+
+  localStorage.setItem("apiKey", key);
+
+  // DEBUG (confirma que salvou)
+  alert("Salvo: " + localStorage.getItem("apiKey"));
+
+  window.location.href = "app.html";
+}
+</script>
+
+</body>
+</html>

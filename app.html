@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Chat</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: #0f0f0f;
+      color: white;
+      padding: 20px;
+    }
+    input {
+      width: 70%;
+      padding: 10px;
+    }
+    button {
+      padding: 10px;
+    }
+    #resposta {
+      margin-top: 20px;
+      background: #1e1e1e;
+      padding: 15px;
+      border-radius: 10px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Gemini Chat 🤖</h2>
+
+<input id="pergunta" placeholder="Digite algo">
+<button onclick="enviar()">Enviar</button>
+
+<div id="resposta">Resposta aparece aqui...</div>
+
+<script>
+const apiKey = localStorage.getItem("apiKey");
+
+// trava se não tiver chave
+if (!apiKey) {
+  alert("Sem API key");
+  window.location.href = "index.html";
+}
+
+// DEBUG
+console.log("API:", apiKey);
+
+async function enviar() {
+  const pergunta = document.getElementById("pergunta").value;
+
+  document.getElementById("resposta").innerText = "Carregando...";
+
+  try {
+   const res = await fetch(
+  "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + apiKey,
+  {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      contents: [
+        {
+          parts: [{ text: pergunta }]
+        }
+      ]
+    })
+  }
+)
+
+    const data = await res.json();
+
+    console.log(data);
+
+    if (data.error) {
+      document.getElementById("resposta").innerText =
+        "Erro: " + data.error.message;
+      return;
+    }
+
+    const texto =
+      data.candidates?.[0]?.content?.parts?.[0]?.text ||
+      "Sem resposta";
+
+    document.getElementById("resposta").innerText = texto;
+
+  } catch (err) {
+    document.getElementById("resposta").innerText =
+      "Erro geral: " + err.message;
+  }
+}
+</script>
+
+</body>
+</html>
